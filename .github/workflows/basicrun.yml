@@ -26,9 +26,3 @@ jobs:
 
     - name: Run test
       run: go test ./... -coverprofile=profile.cov
-    
-    - name: Coveralls
-      uses: shogo82148/actions-goveralls@v1
-      with:
-        path-to-profile: profile.cov
-        ignore: adventserver.go
