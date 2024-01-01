@@ -26,13 +26,8 @@ var (
 type Server struct{}
 
 func (s *Server) Scrape(ctx context.Context, req *pb.ScrapeRequest) (*pb.ScrapeResponse, error) {
-	// New creates a new context for use with chromedp. With this context
-	// you can use chromedp as you normally would.
 	ctx, cancel, err := cu.New(cu.NewConfig(
-		// Remove this if you want to see a browser window.
 		cu.WithHeadless(),
-
-		// If the webelement is not found within 10 seconds, timeout.
 		cu.WithTimeout(10*time.Second),
 	))
 	if err != nil {
@@ -46,9 +41,7 @@ func (s *Server) Scrape(ctx context.Context, req *pb.ScrapeRequest) (*pb.ScrapeR
 		chromedp.Evaluate(stealth.JS, nil),
 		chromedp.Navigate(req.GetUrl()),
 		chromedp.Sleep(2000*time.Millisecond),
-		// extract the raw HTML from the page
 		chromedp.ActionFunc(func(ctx context.Context) error {
-			// select the root node on the page
 			rootNode, err := dom.GetDocument().Do(ctx)
 			if err != nil {
 				return err
