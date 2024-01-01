@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package adventofcode;
+
+option go_package = "github.com/brotherlogic/adventofcode/proto";
+
+message ScrapeRequest {
+    string url = 1;
+}
+
+message ScrapeResponse {
+    string body = 1;
+}
+
+service ScraperService {
+    rpc Scrape(ScrapeRequest) returns (ScrapeResponse) {};
+}
