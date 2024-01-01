@@ -20,6 +20,8 @@ jobs:
         with:
           images: |
             brotherlogic/scraper
+          flavor: |
+            latest=false
           tags: |
             type=ref,event=branch
             type=ref,event=pr
