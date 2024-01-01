@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: scraper
-          image: registry.brotherlogic-backend.com/brotherlogic/scraper:0.277.0 # {"$imagepolicy": "flux-system:scraper"}
+          image: registry.brotherlogic-backend.com/brotherlogic/scraper:0.9.0 # {"$imagepolicy": "flux-system:scraper"}
           ports:
             - containerPort: 8080
       imagePullSecrets:
