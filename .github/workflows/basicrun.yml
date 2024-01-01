@@ -21,6 +21,9 @@ jobs:
       with:
         go-version: '1.19.1'
 
+    - name: Install
+      run: sudo apt-get install -y chromium-browser xvfb
+
     - name: Run build
       run: go build ./...
 
