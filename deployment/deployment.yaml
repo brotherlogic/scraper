@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scraper
+  namespace: scarper
+spec:
+  selector:
+    matchLabels:
+      app: scraper
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: scraper
+    spec:
+      containers:
+        - name: scraper
+          image: registry.brotherlogic-backend.com/brotherlogic/scraper:0.277.0 # {"$imagepolicy": "flux-system:scraper"}
+          ports:
+            - containerPort: 8080
+      imagePullSecrets:
+        - name: regcred
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: scraper
+  namespace: monitoring
+  labels:
+    release: kube-prometheus-stack
+spec:
+  endpoints:
+    - port: metrics
+      path: /metrics
+      interval: 30s
+  namespaceSelector:
+    matchNames:
+      - scraper
+  selector:
+    matchLabels:
+      app: scraper
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: scraper
+  namespace: scraper
+  labels:
+    app: scraper
+spec:
+  type: NodePort
+  metadata:
+    labels:
+      app: scraper
+  ports:
+    - name: grpc
+      port: 8080
+      targetPort: 8080
+  selector:
+    app: scraper
