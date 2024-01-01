@@ -31,7 +31,7 @@ func (s *Server) Scrape(ctx context.Context, req *pb.ScrapeRequest) (*pb.ScrapeR
 		cu.WithTimeout(10*time.Second),
 	))
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("error building cu: %w", err)
 	}
 	defer cancel()
 
