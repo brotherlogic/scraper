@@ -28,7 +28,7 @@ type Server struct{}
 func (s *Server) Scrape(ctx context.Context, req *pb.ScrapeRequest) (*pb.ScrapeResponse, error) {
 	ctx, cancel, err := cu.New(cu.NewConfig(
 		cu.WithHeadless(),
-		cu.WithTimeout(10*time.Second),
+		cu.WithTimeout(60*time.Second),
 	))
 	if err != nil {
 		return nil, fmt.Errorf("error building chrome headless: %w", err)
