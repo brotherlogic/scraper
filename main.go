@@ -44,14 +44,14 @@ func (s *Server) Scrape(ctx context.Context, req *pb.ScrapeRequest) (*pb.ScrapeR
 		chromedp.ActionFunc(func(ctx context.Context) error {
 			rootNode, err := dom.GetDocument().Do(ctx)
 			if err != nil {
-				return err
+				return fmt.Errorf("error getting document: %w", err)
 			}
 			html, err = dom.GetOuterHTML().WithNodeID(rootNode.NodeID).Do(ctx)
-			return err
+			return fmt.Errorf("error getting html: %w", err)
 		}),
 	)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("error running chromedp: %w", err)
 	}
 
 	return &pb.ScrapeResponse{Body: html}, nil
