@@ -31,7 +31,7 @@ func (s *Server) Scrape(ctx context.Context, req *pb.ScrapeRequest) (*pb.ScrapeR
 		cu.WithTimeout(60*time.Second),
 	))
 	if err != nil {
-		return nil, fmt.Errorf("error building chr headless: %w", err)
+		return nil, fmt.Errorf("error building chro headless: %w", err)
 	}
 	defer cancel()
 
