@@ -18,7 +18,7 @@ func GetTestClient() ScraperClient {
 
 func (c *TestClient) Scrape(ctx context.Context, req *pb.ScrapeRequest) (*pb.ScrapeResponse, error) {
 
-	testFile := strings.Replace(strings.Replace(url[23:], "?", "_", -1), "&", "_", -1)
+	testFile := strings.Replace(strings.Replace(req.GetUrl()[23:], "?", "_", -1), "&", "_", -1)
 
 	stat, err := os.Stat("testdata" + testFile)
 	if err != nil {
