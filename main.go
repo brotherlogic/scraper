@@ -28,10 +28,10 @@ type Server struct{}
 func (s *Server) Scrape(ctx context.Context, req *pb.ScrapeRequest) (*pb.ScrapeResponse, error) {
 	ctx, cancel, err := cu.New(cu.NewConfig(
 		cu.WithHeadless(),
-		cu.WithTimeout(10*time.Second),
+		cu.WithTimeout(60*time.Second),
 	))
 	if err != nil {
-		return nil, fmt.Errorf("error building cu: %w", err)
+		return nil, fmt.Errorf("error building chrome headless: %w", err)
 	}
 	defer cancel()
 
@@ -44,14 +44,17 @@ func (s *Server) Scrape(ctx context.Context, req *pb.ScrapeRequest) (*pb.ScrapeR
 		chromedp.ActionFunc(func(ctx context.Context) error {
 			rootNode, err := dom.GetDocument().Do(ctx)
 			if err != nil {
-				return err
+				return fmt.Errorf("error getting document: %w", err)
 			}
 			html, err = dom.GetOuterHTML().WithNodeID(rootNode.NodeID).Do(ctx)
+			if err != nil {
+				return fmt.Errorf("error getting html: %w", err)
+			}
 			return err
 		}),
 	)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("error running chromedp: %w", err)
 	}
 
 	return &pb.ScrapeResponse{Body: html}, nil
