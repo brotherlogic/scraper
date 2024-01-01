@@ -47,7 +47,10 @@ func (s *Server) Scrape(ctx context.Context, req *pb.ScrapeRequest) (*pb.ScrapeR
 				return fmt.Errorf("error getting document: %w", err)
 			}
 			html, err = dom.GetOuterHTML().WithNodeID(rootNode.NodeID).Do(ctx)
-			return fmt.Errorf("error getting html: %w", err)
+			if err != nil {
+				return fmt.Errorf("error getting html: %w", err)
+			}
+			return err
 		}),
 	)
 	if err != nil {
