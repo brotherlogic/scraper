@@ -57,6 +57,7 @@ func (s *Server) Scrape(ctx context.Context, req *pb.ScrapeRequest) (*pb.ScrapeR
 		return nil, fmt.Errorf("error running chromedp: %w", err)
 	}
 
+	log.Printf("Scraped %v -> %v", req.GetUrl(), html)
 	return &pb.ScrapeResponse{Body: html}, nil
 }
 
