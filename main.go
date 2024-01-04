@@ -33,7 +33,7 @@ func (s *Server) Scrape(ctx context.Context, req *pb.ScrapeRequest) (*pb.ScrapeR
 
 	ctx, cancel, err := cu.New(cu.NewConfig(
 		cu.WithHeadless(),
-		cu.WithTimeout(60*time.Second),
+		cu.WithTimeout(time.Minute),
 	))
 	if err != nil {
 		return nil, fmt.Errorf("error building chrome headless: %w", err)
@@ -45,7 +45,7 @@ func (s *Server) Scrape(ctx context.Context, req *pb.ScrapeRequest) (*pb.ScrapeR
 	err = chromedp.Run(ctx,
 		chromedp.Evaluate(stealth.JS, nil),
 		chromedp.Navigate(req.GetUrl()),
-		chromedp.Sleep(2000*time.Millisecond),
+		chromedp.WaitReady("body"),
 		chromedp.ActionFunc(func(ctx context.Context) error {
 			rootNode, err := dom.GetDocument().Do(ctx)
 			if err != nil {
