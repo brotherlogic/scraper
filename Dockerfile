@@ -19,7 +19,7 @@ RUN CGO_ENABLED=0 go build -o /scraper
 ##
 ## Deploy
 ##
-FROM gcr.io/distroless/base-debian11
+FROM ubuntu:18.04
 
 RUN apt-get update && apt-get install -y xvfb
 
