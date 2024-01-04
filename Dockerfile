@@ -30,6 +30,6 @@ COPY --from=build /scraper /scraper
 EXPOSE 8080
 EXPOSE 8081
 
-USER nonroot:nonroot
+USER root:root
 
 ENTRYPOINT ["/scraper"]
