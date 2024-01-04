@@ -21,9 +21,9 @@ RUN CGO_ENABLED=0 go build -o /scraper
 ##
 FROM gcr.io/distroless/base-debian11
 
-WORKDIR /
-
 RUN apt-get update && apt-get install -y xvfb
+
+WORKDIR /
 
 COPY --from=build /scraper /scraper
 
