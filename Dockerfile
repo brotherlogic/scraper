@@ -23,6 +23,9 @@ FROM gcr.io/distroless/base-debian11
 
 WORKDIR /
 
+RUN apt-get update && apt-get install -y \
+    xvfb
+
 COPY --from=build /scraper /scraper
 
 EXPOSE 8080
