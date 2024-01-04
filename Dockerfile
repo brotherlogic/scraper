@@ -21,7 +21,7 @@ RUN CGO_ENABLED=0 go build -o /scraper
 ##
 FROM ubuntu:18.04
 
-RUN apt-get update && apt-get install -y xvfb
+RUN apt-get update && apt-get install -y xvfb chromium-browser
 
 WORKDIR /
 
