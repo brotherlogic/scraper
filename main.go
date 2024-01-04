@@ -26,6 +26,11 @@ var (
 type Server struct{}
 
 func (s *Server) Scrape(ctx context.Context, req *pb.ScrapeRequest) (*pb.ScrapeResponse, error) {
+	t := time.Now()
+	defer func(t time.Time) {
+		log.Printf("Scraped in %v", time.Since(t))
+	}(t)
+
 	ctx, cancel, err := cu.New(cu.NewConfig(
 		cu.WithHeadless(),
 		cu.WithTimeout(60*time.Second),
@@ -57,7 +62,7 @@ func (s *Server) Scrape(ctx context.Context, req *pb.ScrapeRequest) (*pb.ScrapeR
 		return nil, fmt.Errorf("error running chromedp: %w", err)
 	}
 
-	log.Printf("Scraped %v -> %v", req.GetUrl(), html)
+	log.Printf("Scraped %v", req.GetUrl())
 	return &pb.ScrapeResponse{Body: html}, nil
 }
 
