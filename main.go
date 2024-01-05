@@ -36,7 +36,7 @@ func (s *Server) Scrape(ctx context.Context, req *pb.ScrapeRequest) (*pb.ScrapeR
 		cu.WithTimeout(time.Minute),
 	))
 	if err != nil {
-		return nil, fmt.Errorf("error building chrome headless: %w", err)
+		panic(fmt.Sprintf("error building chrome headless: %w", err))
 	}
 	defer cancel()
 
