@@ -8,7 +8,7 @@ require (
 	github.com/chromedp/chromedp v0.9.3
 	github.com/go-rod/stealth v0.4.9
 	google.golang.org/grpc v1.60.1
-	google.golang.org/protobuf v1.32.0
+	google.golang.org/protobuf v1.33.0
 )
 
 require (
