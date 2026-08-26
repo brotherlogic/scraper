@@ -4,8 +4,12 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"io"
 	"log"
 	"net"
+	"net/http"
+	"os"
+	"strings"
 	"time"
 
 	"github.com/chromedp/cdproto/dom"
@@ -61,6 +65,28 @@ func (s *Server) Scrape(ctx context.Context, req *pb.ScrapeRequest) (*pb.ScrapeR
 	)
 	if err != nil {
 		return nil, fmt.Errorf("error running chromedp: %w", err)
+	}
+
+	if strings.Contains(html, "<title>Just a moment...</title>") || strings.Contains(html, "Cloudflare") {
+		log.Printf("Detected Cloudflare, falling back to scrape.do")
+		token := os.Getenv("SCRAPE_DO_TOKEN")
+		if token != "" {
+			reqUrl := fmt.Sprintf("http://api.scrape.do?token=%s&url=%s", token, req.GetUrl())
+			resp, err := http.Get(reqUrl)
+			if err == nil {
+				defer resp.Body.Close()
+				bodyBytes, err := io.ReadAll(resp.Body)
+				if err == nil {
+					html = string(bodyBytes)
+				} else {
+					log.Printf("Error reading scrape.do response: %v", err)
+				}
+			} else {
+				log.Printf("Error requesting scrape.do: %v", err)
+			}
+		} else {
+			log.Printf("SCRAPE_DO_TOKEN not set, cannot fallback")
+		}
 	}
 
 	log.Printf("Scraped %v", req.GetUrl())
