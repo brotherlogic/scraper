@@ -27,6 +27,7 @@ var (
 	metricsPort = flag.Int("metrics_port", 8081, "Metrics port")
 )
 
+// Server represents the scraper gRPC server.
 type Server struct{}
 
 func (s *Server) Scrape(ctx context.Context, req *pb.ScrapeRequest) (*pb.ScrapeResponse, error) {
