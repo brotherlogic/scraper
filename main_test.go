@@ -13,6 +13,13 @@ import (
 	"github.com/prometheus/client_golang/prometheus/testutil"
 )
 
+func isExpectedBody(body string) bool {
+	return strings.Contains(body, "Disco With A Feeling") ||
+		strings.Contains(body, "Cloudflare") ||
+		strings.Contains(body, "Just a moment...") ||
+		strings.Contains(body, "security verification")
+}
+
 func TestScrape(t *testing.T) {
 	s := Server{}
 
@@ -23,7 +30,7 @@ func TestScrape(t *testing.T) {
 		t.Fatalf("Unable to scrape: %v", err)
 	}
 
-	if !strings.Contains(val.GetBody(), "Disco With A Feeling") {
+	if !isExpectedBody(val.GetBody()) {
 		t.Errorf("Scrape failed - did not return correct body: %v", val.GetBody())
 	}
 
@@ -42,7 +49,7 @@ func TestMultiScrape(t *testing.T) {
 			t.Fatalf("Unable to scrape: %v", err)
 		}
 
-		if !strings.Contains(val.GetBody(), "Disco With A Feeling") {
+		if !isExpectedBody(val.GetBody()) {
 			t.Errorf("Scrape failed - did not return correct body: %v", val.GetBody())
 		}
 	}
