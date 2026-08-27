@@ -1,0 +1,56 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/ubuntu
+{
+    "name": "Scraper",
+    // Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+    "image": "mcr.microsoft.com/devcontainers/base:noble",
+    "features": {
+        "ghcr.io/devcontainers/features/go:1": {},
+        "ghcr.io/nils-geistmann/devcontainers-features/zsh:0": {},
+        "ghcr.io/siri404/devcontainer-ai-features/gemini-cli:1": {},
+        "ghcr.io/devcontainers/features/common-utils": "2",
+        "ghcr.io/devcontainers-extra/features/protoc:1": {},
+			"ghcr.io/devcontainers/features/github-cli:1": {
+			"version": "latest",
+			"installDirectlyFromGitHubRelease": true
+		}
+    },
+    // Features to add to the dev container. More info: https://containers.dev/features.
+    // "features": {},
+    // Use 'forwardPorts' to make a list of ports inside the container available locally.
+    // "forwardPorts": [],
+    // Use 'postCreateCommand' to run commands after the container is created.
+    // Ensure dependencies are installed here
+    "postCreateCommand": "./postCreate.sh",
+    "initializeCommand": "cat ~/.seraphine-automation > .devcontainer/.env.auth",
+    // "customizations": {},
+    // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+    // "remoteUser": "root"
+    	"runArgs": [
+		"--network=host",
+		"--security-opt",
+	    "label=disable",
+	    		"--env-file",
+		"${localWorkspaceFolder}/.devcontainer/.env.auth"
+	],
+
+    "mounts": [
+        {
+            "source": "${localEnv:HOME}/.ssh",
+            "target": "/home/vscode/.ssh", 
+            "type": "bind",
+            "options": "readonly"
+        },
+	"source=${localEnv:HOME}/.gemini,target=/home/vscode/.gemini,type=bind",
+		    		"source=/var/run/dbus,target=/var/run/dbus,type=bind",
+		"source=/run/user,target=/run/user,type=bind"
+    ],
+    	"containerEnv": {
+	    "GH_GIT_PROTOCOL": "ssh",
+	    	"DBUS_SESSION_BUS_ADDRESS": "unix:path=/run/user/1000/bus",
+		"LANG": "en_US.UTF-8",
+		"LC_ALL": "en_US.UTF-8",
+		"TZ": "America/Los_Angeles"
+	},
+    "workspaceFolder": "/workspaces/scraper"
+}
