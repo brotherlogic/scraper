@@ -18,6 +18,9 @@ spec:
           image: ghcr.io/brotherlogic/scraper:0.78.0 # {"$imagepolicy": "flux-system:scraper"}
           ports:
             - containerPort: 8080
+              name: grpc
+            - containerPort: 8081
+              name: metrics
       imagePullSecrets:
         - name: regcred
 ---
@@ -56,5 +59,9 @@ spec:
     - name: grpc
       port: 8080
       targetPort: 8080
+    - name: metrics
+      port: 8081
+      targetPort: 8081
   selector:
     app: scraper
+
